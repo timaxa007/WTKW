@@ -22,9 +22,9 @@ public class Events {
 
 	private static final Minecraft mc = Minecraft.getMinecraft();
 	public static byte direction = 2;
-	public static int delayShowMax = 60;
+	public static int offsetX = 0, offsetY = 0, delayShowMax = 60;
 	private static final ArrayList<WTKW> list = new ArrayList<WTKW>();
-	private static int x = 0, y = 0, offsetY = 0;
+	private static int x = 0, y = 0, y2 = 0;
 	private static boolean posTop = true;
 
 	@SubscribeEvent
@@ -33,14 +33,14 @@ public class Events {
 		if (list.isEmpty()) return;
 
 		switch(direction % 3) {
-		case 0:x = 0;break;
-		case 1:x = event.resolution.getScaledWidth() / 2;break;
-		case 2:x = event.resolution.getScaledWidth();break;
+		case 0:x = offsetX;break;
+		case 1:x = (event.resolution.getScaledWidth() / 2) + offsetX;break;
+		case 2:x = event.resolution.getScaledWidth() + offsetX;break;
 		}
 
 		switch(direction / 3) {
-		case 0:y = 0;break;
-		case 1:y = event.resolution.getScaledHeight();break;
+		case 0:y = offsetY;break;
+		case 1:y = event.resolution.getScaledHeight() + offsetY;break;
 		}
 
 		switch(event.type) {
@@ -49,23 +49,23 @@ public class Events {
 			for (int i = list.size() - 1; i >= 0; --i) {
 				WTKW wtkw = list.get(i);
 				if (wtkw.than == null) continue;
-				offsetY = (i * 16);
+				y2 = (i * 16);
 				mc.ingameGUI.drawTexturedModelRectFromIcon(
 						(direction % 3 == 1 ? x - 9 : direction % 3 == 0 ? x + wtkw.offset : x - wtkw.offset - 16),
-						(y == 0 ? y + offsetY + 6 : y - offsetY - 15) - 3, wtkw.than.getIconIndex(), 16, 16);
+						(y == 0 ? y + y2 + 6 : y - y2 - 15) - 3, wtkw.than.getIconIndex(), 16, 16);
 			}
 			GL11.glColor4f(1F, 1F, 1F, 1F);
 			break;
 		case TEXT:
 			for (int i = list.size() - 1; i >= 0; --i) {
 				WTKW wtkw = list.get(i);
-				offsetY = (i * 16);
+				y2 = (i * 16);
 				mc.fontRenderer.drawStringWithShadow(wtkw.who,
 						(direction % 3 == 1 ? x - 9 - wtkw.offset : direction % 3 == 0 ? x : x - wtkw.offset - 16 - mc.fontRenderer.getStringWidth(wtkw.who)),
-						(y == 0 ? y + offsetY + 7 : y - offsetY - 13), 0xFFFFFF);
+						(y == 0 ? y + y2 + 7 : y - y2 - 13), 0xFFFFFF);
 				mc.fontRenderer.drawStringWithShadow(wtkw.whom,
 						(direction % 3 == 1 ? x + 9 : direction % 3 == 0 ? x + wtkw.offset + 16 : x - wtkw.offset),
-						(y == 0 ? y + offsetY + 6 : y - offsetY - 13), 0xFFFFFF);
+						(y == 0 ? y + y2 + 6 : y - y2 - 13), 0xFFFFFF);
 			}
 			break;
 		default:return;

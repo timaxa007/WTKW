@@ -16,6 +16,8 @@ public class Proxy extends timaxa007.killed_whom.Proxy {
 		e.direction = (byte)config.get("gui", "direction", e.direction,
 				"0 - left-top,		1 - center-top,		2 - right-top, \n" +
 				"3 - left-botton,	4 - center-botton,	5 - right-botton.").getInt();
+		e.offsetX = config.get("gui", "offsetX", e.offsetX).getInt();
+		e.offsetY = config.get("gui", "offsetY", e.offsetY).getInt();
 		config.save();
 		MinecraftForge.EVENT_BUS.register(e);
 		FMLCommonHandler.instance().bus().register(e);
