@@ -8,13 +8,14 @@ import cpw.mods.fml.relauncher.Side;
 import net.minecraftforge.common.MinecraftForge;
 import timaxa007.killed_whom.network.DeathWTKWMessage;
 
-@Mod(modid = KilledWhomMod.MODID, name = KilledWhomMod.NAME, version = KilledWhomMod.VERSION)
+@Mod(modid = KilledWhomMod.MODID, name = KilledWhomMod.NAME, version = KilledWhomMod.VERSION,
+guiFactory = "timaxa007.killed_whom.client.GuiFactory")
 public class KilledWhomMod {
 
 	public static final String
 	MODID = "killed_whom",
-	NAME = "Who Than Killed Whom Mod",
-	VERSION = "0.86";
+	NAME = "Who Than Killed Whom",
+	VERSION = "0.87";
 
 	@Mod.Instance(MODID)
 	public static KilledWhomMod instance;

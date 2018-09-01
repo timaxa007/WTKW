@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
@@ -16,6 +17,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import timaxa007.killed_whom.KilledWhomMod;
 
 @SideOnly(Side.CLIENT)
 public class Events {
@@ -52,7 +54,7 @@ public class Events {
 				y2 = (i * 16);
 				mc.ingameGUI.drawTexturedModelRectFromIcon(
 						(direction % 3 == 1 ? x - 9 : direction % 3 == 0 ? x + wtkw.offset : x - wtkw.offset - 16),
-						(y == 0 ? y + y2 + 6 : y - y2 - 15) - 3, wtkw.than.getIconIndex(), 16, 16);
+						(direction / 3 == 0 ? y + y2 + 6 : y - y2 - 15) - 3, wtkw.than.getIconIndex(), 16, 16);
 			}
 			GL11.glColor4f(1F, 1F, 1F, 1F);
 			break;
@@ -62,10 +64,10 @@ public class Events {
 				y2 = (i * 16);
 				mc.fontRenderer.drawStringWithShadow(wtkw.who,
 						(direction % 3 == 1 ? x - 9 - wtkw.offset : direction % 3 == 0 ? x : x - wtkw.offset - 16 - mc.fontRenderer.getStringWidth(wtkw.who)),
-						(y == 0 ? y + y2 + 7 : y - y2 - 13), 0xFFFFFF);
+						(direction / 3 == 0 ? y + y2 + 7 : y - y2 - 13), 0xFFFFFF);
 				mc.fontRenderer.drawStringWithShadow(wtkw.whom,
 						(direction % 3 == 1 ? x + 9 : direction % 3 == 0 ? x + wtkw.offset + 16 : x - wtkw.offset),
-						(y == 0 ? y + y2 + 6 : y - y2 - 13), 0xFFFFFF);
+						(direction / 3 == 0 ? y + y2 + 6 : y - y2 - 13), 0xFFFFFF);
 			}
 			break;
 		default:return;
@@ -86,6 +88,11 @@ public class Events {
 	public void firstMessegeOut(ClientDisconnectionFromServerEvent event) {
 		list.clear();
 		list.trimToSize();
+	}
+
+	@SubscribeEvent
+	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
+		if (event.modID.equals(KilledWhomMod.MODID)) Config.syncConfig();
 	}
 
 	/**Who Than Killed Whom**/
