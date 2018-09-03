@@ -17,11 +17,12 @@ public class Config {
 	}
 
 	public static void syncConfig() {
-		Events.direction = (byte)config.get("gui", "direction", Events.direction,
+		Events.direction = (byte)config.get(categoryGui, "direction", Events.direction,
 				"0 - left-top,		1 - center-top,		2 - right-top, \n" +
 				"3 - left-botton,	4 - center-botton,	5 - right-botton.").getInt();
-		Events.offsetX = config.get("gui", "offsetX", Events.offsetX).getInt();
-		Events.offsetY = config.get("gui", "offsetY", Events.offsetY).getInt();
+		Events.offsetX = config.get(categoryGui, "offsetX", Events.offsetX).getInt();
+		Events.offsetY = config.get(categoryGui, "offsetY", Events.offsetY).getInt();
+		Events.delayShowMax = config.get(categoryGui, "delayShowMax", Events.delayShowMax).getInt();
 		if (config.hasChanged()) config.save();
 	}
 

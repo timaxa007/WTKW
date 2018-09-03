@@ -11,7 +11,9 @@ import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServer
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,11 +25,12 @@ import timaxa007.killed_whom.KilledWhomMod;
 public class Events {
 
 	private static final Minecraft mc = Minecraft.getMinecraft();
-	public static byte direction = 2;
+	public static byte direction = 1;
 	public static int offsetX = 0, offsetY = 0, delayShowMax = 60;
 	private static final ArrayList<WTKW> list = new ArrayList<WTKW>();
 	private static int x = 0, y = 0, y2 = 0;
 	private static boolean posTop = true;
+	private static final RenderItem renderItem = RenderItem.getInstance();
 
 	@SubscribeEvent
 	public void drawText(RenderGameOverlayEvent.Post event) {
@@ -47,18 +50,28 @@ public class Events {
 
 		switch(event.type) {
 		case ALL:
-			Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationItemsTexture);
+			if (list.isEmpty()) break;
+			GL11.glColor4f(1F, 1F, 1F, 1F);
+			if (GL11.glIsEnabled(GL11.GL_BLEND)) GL11.glDisable(GL11.GL_BLEND);
+			RenderHelper.enableGUIStandardItemLighting();
+
 			for (int i = list.size() - 1; i >= 0; --i) {
 				WTKW wtkw = list.get(i);
 				if (wtkw.than == null) continue;
 				y2 = (i * 16);
-				mc.ingameGUI.drawTexturedModelRectFromIcon(
+				FontRenderer font = wtkw.than.getItem().getFontRenderer(wtkw.than);
+				if (font == null) font = mc.fontRenderer;
+				renderItem.renderItemAndEffectIntoGUI(font, this.mc.getTextureManager(), wtkw.than,
 						(direction % 3 == 1 ? x - 9 : direction % 3 == 0 ? x + wtkw.offset : x - wtkw.offset - 16),
-						(direction / 3 == 0 ? y + y2 + 6 : y - y2 - 15) - 3, wtkw.than.getIconIndex(), 16, 16);
+						(direction / 3 == 0 ? y + y2 + 6 : y - y2 - 15) - 3);
 			}
+
+			RenderHelper.disableStandardItemLighting();
+			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glColor4f(1F, 1F, 1F, 1F);
 			break;
 		case TEXT:
+			if (list.isEmpty()) return;
 			for (int i = list.size() - 1; i >= 0; --i) {
 				WTKW wtkw = list.get(i);
 				y2 = (i * 16);

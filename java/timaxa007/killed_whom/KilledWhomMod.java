@@ -15,7 +15,7 @@ public class KilledWhomMod {
 	public static final String
 	MODID = "killed_whom",
 	NAME = "Who Than Killed Whom",
-	VERSION = "0.87";
+	VERSION = "0.88";
 
 	@Mod.Instance(MODID)
 	public static KilledWhomMod instance;
